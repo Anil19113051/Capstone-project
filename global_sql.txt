@@ -1,0 +1,81 @@
+[training@localhost ~]$ mysql --user=training --password=training
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 8
+Server version: 5.1.66 Source distribution
+
+Copyright (c) 2000, 2012, Oracle and/or its affiliates. All rights reserved.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> show databases;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| department         |
+| global             |
+| hue                |
+| metastore          |
+| movielens          |
+| mysql              |
+| nagraj             |
+| project            |
+| test               |
+| training           |
++--------------------+
+11 rows in set (0.01 sec)
+
+mysql> use global;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> create table terrorism eventid int(40), iyear int(4), imonth
+int(3), iday int(3), country_txt varchar(40), region_txt varchar(40),
+target1 varchar(30), nkill int(3), nwound int(3);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the
+manual that corresponds to your MySQL server version for the right
+syntax to use near 'eventid int(40), iyear int(4), imonth int(3), iday
+int(3), country_txt varchar(4' at line 1
+mysql> create table terrorism (eventid int(40), iyear int(4), imonth
+int(3), iday int(3), country_txt varchar(40), region_txt varchar(40),
+target1 varchar(30), nkill int(3), nwound int(3));
+ERROR 1050 (42S01): Table 'terrorism' already exists
+mysql> create table globalterrorism (eventid int(40), iyear int(4),
+imonth int(3), iday int(3), country_txt varchar(40), region_txt
+varchar(40), target1 varchar(30), nkill int(3), nwound int(3));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> LOAD DATA local
+INFILE'/home/training/Downloads/Modified_global.csv'INTO TABLE
+globalterrorism fields terminated by','lines terminated by'\n' ignore
+1 lines;
+Query OK, 2276 rows affected, 7385 warnings (0.01 sec)
+Records: 2276  Deleted: 0  Skipped: 0  Warnings: 4615
+
+mysql> select * from globalterrorism limit 5;
++------------+-------+--------+------+--------------------+-----------------------------+--------------------------------+-------+--------+
+| eventid    | iyear | imonth | iday | country_txt        | region_txt
+                 | target1                        | nkill | nwound |
++------------+-------+--------+------+--------------------+-----------------------------+--------------------------------+-------+--------+
+| 2147483647 |  1970 |      7 |    2 | Dominican Republic | Central
+America & Caribbean | Assassination                  |     0 |      1
+|
+| 2147483647 |  1970 |      0 |    0 | Mexico             | North
+America               | Hostage Taking (Kidnapping)    |     0 |
+0 |
+| 2147483647 |  1970 |      1 |    0 | Philippines        | Southeast
+Asia              | Assassination                  |     0 |      1 |
+| 2147483647 |  1970 |      1 |    0 | Greece             | Western
+Europe              | Bombing/Explosion              |     0 |      0
+|
+| 2147483647 |  1970 |      1 |    0 | Japan              | East Asia
+                 | Facility/Infrastructure Attack |     0 |      0 |
++------------+-------+--------+------+--------------------+-----------------------------+--------------------------------+-------+--------+
+5 rows in set (0.00 sec)
+
+mysql>
