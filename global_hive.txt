@@ -1,0 +1,46 @@
+[training@localhost ~]$ hive
+Logging initialized using configuration in
+file:/etc/hive/conf.dist/hive-log4j.properties
+Hive history file=/tmp/training/hive_job_log_training_202309191938_1948668636.txt
+hive> show databases;
+OK
+default
+employee
+global
+Time taken: 3.001 seconds
+hive> use global;
+OK
+Time taken: 0.021 seconds
+hive> CREATE TABLE terrorism (
+    >   eventid BIGINT,
+    >   iyear INT,
+    >   imonth INT,
+    >   iday INT,
+    >   country_txt STRING,
+    >   region_txt STRING,
+    >   target1 STRING,
+    >   nkill INT,
+    >   nwound INT )
+    > ROW FORMAT DELIMITED
+    > FIELDS TERMINATED BY ','
+    > STORED AS TEXTFILE;
+OK
+Time taken: 1.095 seconds
+hive> LOAD DATA INPATH /capstone/part-m-00000' into table terrorism;
+FAILED: ParseException line 1:17 mismatched input '/' expecting
+StringLiteral near 'INPATH' in load statement
+
+hive>  LOAD DATA INPATH '/capstone/part-m-00000' into table terrorism;
+Loading data to table global.terrorism
+OK
+Time taken: 0.52 seconds
+hive> select * from terrorism limit 5;
+OK
+2147483647	1970	7	2	Dominican Republic	Central America &
+Caribbean	Assassination	0	1
+2147483647	1970	0	0	Mexico	North America	Hostage Taking (Kidnapping)	0	0
+2147483647	1970	1	0	Philippines	Southeast Asia	Assassination	0	1
+2147483647	1970	1	0	Greece	Western Europe	Bombing/Explosion	0	0
+2147483647	1970	1	0	Japan	East Asia	Facility/Infrastructure Attack	0	0
+Time taken: 0.328 seconds
+hive>
